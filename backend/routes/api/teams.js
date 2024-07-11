@@ -3,7 +3,7 @@ const { Team, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
-// GET all teams
+// GET all teams 
 router.get('/', async (req, res) => {
     const teams = await Team.findAll({
         include: [{ model: User, as: 'Players', attributes: ['id', 'firstName', 'lastName'] }]
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.json({ teams });
 });
 
-// GET team by ID
+// GET team by ID 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const team = await Team.findByPk(id, {
@@ -24,14 +24,17 @@ router.get('/:id', async (req, res) => {
     res.json(team);
 });
 
-// POST new team
+// POST new team 
 router.post('/', requireAuth, async (req, res) => {
+    if (req.user.type !== 'admin' && req.user.type !== 'coach') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
     const { teamName, coachId, homeArena } = req.body;
     const newTeam = await Team.create({ teamName, coachId, homeArena });
     res.status(201).json(newTeam);
 });
 
-// PUT update team
+// PUT update team 
 router.put('/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
     const { teamName, coachId, homeArena } = req.body;
@@ -39,16 +42,24 @@ router.put('/:id', requireAuth, async (req, res) => {
     const team = await Team.findByPk(id);
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
 
-    team.teamName = teamName;
-    team.coachId = coachId;
-    team.homeArena = homeArena;
+    if (req.user.type !== 'admin' && req.user.id !== team.coachId) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
+    team.teamName = teamName || team.teamName;
+    team.coachId = coachId || team.coachId;
+    team.homeArena = homeArena || team.homeArena;
 
     await team.save();
     res.json(team);
 });
 
-// DELETE team
+// DELETE team 
 router.delete('/:id', requireAuth, async (req, res) => {
+    if (req.user.type !== 'admin') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+a
     const { id } = req.params;
 
     const team = await Team.findByPk(id);
