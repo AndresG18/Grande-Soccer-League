@@ -1,36 +1,26 @@
-// backend/routes/api/index.js
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
-const groupsRouter = require('./groups.js');
-const venuesRouter = require('./venues.js')
-const eventRouter = require('./events.js')
-const groupImagesRouter = require('./group-images.js')
-const eventImagesRouter = require('./event-images.js')
+const teamsRouter = require('./teams.js');
+const gamesRouter = require('./games.js');
+const teamStandingsRouter = require('./team-standings.js');
+const tournamentsRouter = require('./tournaments.js');
 const { restoreUser } = require("../../utils/auth.js");
 
 // Connect restoreUser middleware to the API router
-  // If current user session is valid, set req.user to the user in the database
-  // If current user session is not valid, set req.user to null
+// If current user session is valid, set req.user to the user in the database
+// If current user session is not valid, set req.user to null
 router.use(restoreUser);
 
 router.use('/session', sessionRouter);
-
 router.use('/users', usersRouter);
+router.use('/teams', teamsRouter);
+router.use('/games', gamesRouter);
+router.use('/team-standings', teamStandingsRouter);
+router.use('/tournaments', tournamentsRouter);
 
 router.post('/test', (req, res) => {
-  res.json({ requestBody: req.body });
+    res.json({ requestBody: req.body });
 });
 
-router.use('/groups',groupsRouter);
-
-router.use('/venues',venuesRouter)
-
-router.use('/events',eventRouter)
-
-router.use('/group-images',groupImagesRouter)
-
-router.use('/event-images',eventImagesRouter)
-
 module.exports = router;
-
