@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
-import OpenModalMenuItem from './OpenModalMenuItem';
+// import OpenModalMenuItem from './OpenModalMenuItem';
+import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
-import { NavLink } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal';
 import { IoMenu } from "react-icons/io5";
-import './ProfileButton.css'
+import { NavLink } from 'react-router-dom';
+import './ProfileButton.css';
+
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -39,42 +41,42 @@ function ProfileButton({ user }) {
     closeSidebar();
   };
 
-  const sidebarClassName = "profile-sidebar" + (showSidebar ? "" : " hidden");
+  const sidebarClassName = `profile-sidebar${showSidebar ? '' : ' hidden'}`;
 
   return (
     <>
       <div className='menu' onClick={toggleSidebar}>
-        <IoMenu className='menu-icon'/>
+        <IoMenu className='menu-icon' />
       </div>
       <div className={sidebarClassName} ref={sidebarRef}>
-        {user ? (
-          <div className='sidebar-content'>
-            <NavLink className='link' to="/">Home</NavLink>
-            <NavLink className='link' to="/">Partners</NavLink>
-            <NavLink className='link' to="/">About</NavLink>
-            <NavLink className='link' to="/">Regsitration</NavLink>
-            <NavLink className='link' to="/">Games</NavLink>
-            <NavLink className='link' to="/">Standings</NavLink>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li>
-              <button className='logout' onClick={logout}>Log Out</button>
-            </li>
-          </div>
-        ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeSidebar}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeSidebar}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
+        <div className='sidebar-content'>
+          <NavLink className='link' to="/">Home</NavLink>
+          <NavLink className='link' to="/">Partners</NavLink>
+          <NavLink className='link' to="/">About</NavLink>
+          <NavLink className='link' to="/">Registration</NavLink>
+          <NavLink className='link' to="/">Games</NavLink>
+          <NavLink className='link' to="/">Standings</NavLink>
+          {user ? (
+            <>
+              {/* <li>{user.firstName} {user.lastName}</li>
+              <li>{user.email}</li> */}
+              <li>
+                <button className='logout' onClick={logout}>Log Out</button>
+              </li>
+            </>
+          ) : (
+            <>
+              <OpenModalButton
+                buttonText="Log In"
+                modalComponent={<LoginFormModal />}
+              />
+              <OpenModalButton
+                buttonText="Sign Up"
+                modalComponent={<SignupFormModal />}
+              />
+            </>
+          )}
+        </div>
       </div>
     </>
   );

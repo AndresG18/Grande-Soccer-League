@@ -1,4 +1,102 @@
 .link {
     text-decoration: none;
     color: white;
+    box-shadow:2px 1px 0px 1px white;
 }
+.link:hover{
+    background-color: #adb5bd;
+}
+:root {
+    --primary-bg-color: #343a40;
+    --secondary-bg-color: #212529;
+    --text-color: white;
+    --button-hover-color: #495057;
+    --menu-icon-size: 50px;
+    --sidebar-width: 13rem;
+  }
+  
+  h1, span, p {
+    color: var(--text-color);
+  }
+  
+  .navBar {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .profile-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: var(--sidebar-width);
+    background-color: var(--primary-bg-color);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+  
+  .profile-sidebar.hidden {
+    transform: translateX(100%);
+  }
+  
+  .profile-sidebar:not(.hidden) {
+    transform: translateX(0);
+  }
+  
+  .sidebar-content {
+    /* padding: 10px; */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+  }
+  
+  .sidebar-content li {
+    list-style: none;
+    margin: 5px 0;
+  }
+  
+  .sidebar-content > * {
+    /* border-bottom: 1px solid var(--text-color); */
+    width: 98%;
+    height: 40px;
+    text-align: center;
+    /* color: var(--text-color); */
+    align-content: center;
+  }
+ 
+  .logout {
+    background-color: #adb5bd;
+    color: var(--text-color);
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-bottom: 0px;
+  }
+  
+  .logout:hover {
+    background-color: var(--button-hover-color);
+  }
+  
+  .menu {
+    height: 50px;
+    width: 50px;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .menu-icon {
+    font-size: var(--menu-icon-size);
+  }
+  
+  .menu:hover {
+    background-color: var(--button-hover-color);
+  }
