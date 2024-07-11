@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Team } = require('../../db/models');
 const router = express.Router();
 
 const { check } = require('express-validator');
@@ -9,11 +9,6 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const validateSignup = [
     check('email').isEmail().withMessage('Invalid email'),
-    check('username')
-        .notEmpty()
-        .withMessage("Username is required")
-        .isLength({ min: 4 })
-        .withMessage("Username is required"),
     check('firstName')
         .isString()
         .withMessage("First Name is required")
@@ -37,7 +32,7 @@ const validateSignup = [
 
 // Sign up
 router.post('/', validateSignup, async (req, res) => {
-    const { firstName, lastName, email, password, username, phone, type } = req.body;
+    const { firstName, lastName, email, password, phone, type, teamId } = req.body;
 
     const checkingEmail = await User.findAll({
         where: { email: email }
@@ -48,30 +43,22 @@ router.post('/', validateSignup, async (req, res) => {
         "errors": { "email": "User with that email already exists" }
     });
 
-    const checkingUsername = await User.findAll({
-        where: { username: username }
-    });
-
-    if (checkingUsername.length > 0) return res.status(500).json({
-        "message": "User already exists",
-        "errors": { "username": "User with that username already exists" }
-    });
-
     const hashedPassword = bcrypt.hashSync(password);
 
     const user = await User.create({
-        first_name: firstName,
-        last_name: lastName,
+        firstName,
+        lastName,
         email,
         phone,
         hashedPassword,
-        type
+        type,
+        teamId
     });
 
     const safeUser = {
         id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         type: user.type,
     };
@@ -79,6 +66,56 @@ router.post('/', validateSignup, async (req, res) => {
     await setTokenCookie(res, safeUser);
 
     return res.json({ user: safeUser });
+});
+
+// GET all users
+router.get('/', async (req, res) => {
+    const users = await User.findAll({
+        include: [{ model: Team, as: 'Team', attributes: ['id', 'teamName'] }]
+    });
+    res.json({ users });
+});
+
+// GET user by ID
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findByPk(id, {
+        include: [{ model: Team, as: 'Team', attributes: ['id', 'teamName'] }]
+    });
+    if (!user) return res.status(404).json({ "message": "User couldn't be found" });
+    res.json(user);
+});
+
+// PUT update user
+router.put('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName, email, phone, type, teamId ,goals,assists} = req.body;
+
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ "message": "User couldn't be found" });
+
+    user.firstName = firstName ?? user.firstName;
+    user.lastName = lastName ?? user.lastName;
+    user.email = email ?? user.email;
+    user.phone = phone ?? user.phone;
+    user.type = type ?? user.type;
+    user.teamId = teamId ?? user.teamId;
+    user.goals = goals ?? user.goals;
+    user.assists = assists ?? user.goals;
+ 
+    await user.save();
+    res.json(user);
+});
+
+// DELETE user
+router.delete('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ "message": "User couldn't be found" });
+
+    await user.destroy();
+    res.json({ message: "Successfully deleted" });
 });
 
 module.exports = router;

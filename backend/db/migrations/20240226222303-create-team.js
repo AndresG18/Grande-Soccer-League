@@ -14,11 +14,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      team_name: {
-        type: Sequelize.STRING(100),
+      teamName: {
+        type: Sequelize.STRING(50),
         allowNull: false
       },
-      coach_id: {
+      coachId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
@@ -26,8 +26,8 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      home_arena: {
-        type: Sequelize.STRING(100)
+      homeArena: {
+        type: Sequelize.STRING(50)
       },
       createdAt: {
         allowNull: false,

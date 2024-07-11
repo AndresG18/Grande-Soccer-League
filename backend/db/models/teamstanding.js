@@ -7,13 +7,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       TeamStanding.belongsTo(models.Team, {
-        foreignKey: 'team_id',
+        foreignKey: 'teamId',
+        as: 'Team'
       });
     }
   }
   TeamStanding.init(
     {
-      team_id: {
+      teamId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Teams',
@@ -21,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      games_played: {
+      gamesPlayed: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },

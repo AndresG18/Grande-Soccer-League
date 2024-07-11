@@ -58,40 +58,34 @@ const validateLogin = [
 ];
 
 // Log in
-router.post(
-    '/',
-    validateLogin,
-    async (req, res, next) => {
-        const { credential, password } = req.body;
+router.post('/', validateLogin, async (req, res, next) => {
+    const { credential, password } = req.body;
 
-        const user = await User.unscoped().findOne({
-            where: {
-                [Op.or]: {
-                    username: credential,
-                    email: credential
-                }
+    const user = await User.unscoped().findOne({
+        where: {
+            [Op.or]: {
+                email: credential,
             }
-        });
-
-        if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-            return res.status(401).json({"message": "Invalid credentials"})
         }
+    });
 
-        const safeUser = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-        };
-
-        await setTokenCookie(res, safeUser);
-
-        return res.json({
-            user: safeUser
-        });
+    if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
+        return res.status(401).json({ "message": "Invalid credentials" });
     }
-);
+
+    const safeUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        type: user.type,
+        goals:user.goals
+    };
+
+    await setTokenCookie(res, safeUser);
+
+    return res.json({ user: safeUser });
+});
 
 
 module.exports = router;

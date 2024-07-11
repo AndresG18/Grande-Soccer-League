@@ -6,25 +6,26 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
-      User.hasMany(models.Team, {
-        foreignKey: 'coach_id',
+      User.belongsTo(models.Team, {
+        foreignKey: 'teamId',
+        as: 'Team'
       });
       User.hasMany(models.Game, {
-        foreignKey: 'home_team_id',
+        foreignKey: 'homeTeamId',
       });
       User.hasMany(models.Game, {
-        foreignKey: 'away_team_id',
+        foreignKey: 'awayTeamId',
       });
     }
-  };
+  }
 
   User.init(
     {
-      first_name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      last_name: {
+      lastName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -50,6 +51,9 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          isIn: [['admin', 'coach', 'player']],
+        },
       },
       goals: {
         type: DataTypes.INTEGER,
@@ -63,6 +67,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      teamId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Teams',
+          key: 'id',
+        },
+        onDelete: 'SET NULL'
+      },
     },
     {
       sequelize,
@@ -74,5 +86,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   );
+
   return User;
 };

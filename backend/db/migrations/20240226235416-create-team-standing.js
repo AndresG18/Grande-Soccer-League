@@ -7,14 +7,14 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Team_Standings', {
+    await queryInterface.createTable('TeamStandings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      team_id: {
+      teamId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Teams',
@@ -22,7 +22,7 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      games_played: {
+      gamesPlayed: {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
@@ -56,7 +56,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Team_Standings";
+    options.tableName = "TeamStandings";
     await queryInterface.dropTable(options);
   }
 };

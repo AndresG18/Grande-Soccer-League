@@ -7,26 +7,30 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Team.belongsTo(models.User, {
-        foreignKey: 'coach_id',
+        foreignKey: 'coachId',
       });
       Team.hasMany(models.Game, {
-        foreignKey: 'home_team_id',
+        foreignKey: 'homeTeamId',
       });
       Team.hasMany(models.Game, {
-        foreignKey: 'away_team_id',
+        foreignKey: 'awayTeamId',
       });
       Team.hasMany(models.TeamStanding, {
-        foreignKey: 'team_id',
+        foreignKey: 'teamId',
+      });
+      Team.hasMany(models.User, {
+        foreignKey: 'teamId',
+        as: 'Players'
       });
     }
   }
   Team.init(
     {
-      team_name: {
+      teamName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      coach_id: {
+      coachId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Users',
@@ -34,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      home_arena: {
+      homeArena: {
         type: DataTypes.STRING,
       },
     },

@@ -7,16 +7,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Bracket.belongsTo(models.Tournament, {
-        foreignKey: 'tournament_id',
+        foreignKey: 'tournamentId',
       });
       Bracket.belongsTo(models.Game, {
-        foreignKey: 'game_id',
+        foreignKey: 'gameId',
       });
     }
   }
   Bracket.init(
     {
-      tournament_id: {
+      tournamentId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Tournaments',
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      round_number: {
+      roundNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      game_id: {
+      gameId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Games',

@@ -14,15 +14,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tournament_name: {
-        type: Sequelize.STRING(100),
+      tournamentName: {
+        type: Sequelize.STRING(50),
         allowNull: false
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
         allowNull: false
       },

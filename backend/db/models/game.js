@@ -7,16 +7,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Game.belongsTo(models.Team, {
-        foreignKey: 'home_team_id',
+        foreignKey: 'homeTeamId',
+        as: 'HomeTeam'
       });
       Game.belongsTo(models.Team, {
-        foreignKey: 'away_team_id',
+        foreignKey: 'awayTeamId',
+        as: 'AwayTeam'
       });
     }
   }
   Game.init(
     {
-      home_team_id: {
+      homeTeamId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Teams',
@@ -24,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      away_team_id: {
+      awayTeamId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Teams',
@@ -32,14 +34,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      game_date: {
+      gameDate: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      home_team_score: {
+      homeTeamScore: {
         type: DataTypes.INTEGER,
       },
-      away_team_score: {
+      awayTeamScore: {
         type: DataTypes.INTEGER,
       },
     },

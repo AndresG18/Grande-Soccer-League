@@ -5,7 +5,9 @@ const router = express.Router();
 
 // GET all teams
 router.get('/', async (req, res) => {
-    const teams = await Team.findAll();
+    const teams = await Team.findAll({
+        include: [{ model: User, as: 'Players', attributes: ['id', 'firstName', 'lastName'] }]
+    });
     res.json({ teams });
 });
 
@@ -13,7 +15,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const team = await Team.findByPk(id, {
-        include: [{ model: User, as: 'Coach', attributes: ['id', 'first_name', 'last_name'] }]
+        include: [
+            { model: User, as: 'Coach', attributes: ['id', 'firstName', 'lastName'] },
+            { model: User, as: 'Players', attributes: ['id', 'firstName', 'lastName'] }
+        ]
     });
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
     res.json(team);
@@ -21,22 +26,22 @@ router.get('/:id', async (req, res) => {
 
 // POST new team
 router.post('/', requireAuth, async (req, res) => {
-    const { team_name, coach_id, home_arena } = req.body;
-    const newTeam = await Team.create({ team_name, coach_id, home_arena });
+    const { teamName, coachId, homeArena } = req.body;
+    const newTeam = await Team.create({ teamName, coachId, homeArena });
     res.status(201).json(newTeam);
 });
 
 // PUT update team
 router.put('/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
-    const { team_name, coach_id, home_arena } = req.body;
+    const { teamName, coachId, homeArena } = req.body;
 
     const team = await Team.findByPk(id);
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
 
-    team.team_name = team_name;
-    team.coach_id = coach_id;
-    team.home_arena = home_arena;
+    team.teamName = teamName;
+    team.coachId = coachId;
+    team.homeArena = homeArena;
 
     await team.save();
     res.json(team);

@@ -7,21 +7,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Tournament.hasMany(models.Bracket, {
-        foreignKey: 'tournament_id',
+        foreignKey: 'tournamentId',
       });
     }
   }
   Tournament.init(
     {
-      tournament_name: {
+      tournamentName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      start_date: {
+      startDate: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      end_date: {
+      endDate: {
         type: DataTypes.DATE,
         allowNull: false,
       },

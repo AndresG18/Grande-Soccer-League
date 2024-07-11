@@ -14,11 +14,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      first_name: {
+      firstName: {
         type: Sequelize.STRING(50),
         allowNull: false
       },
-      last_name: {
+      lastName: {
         type: Sequelize.STRING(50),
         allowNull: false
       },
@@ -50,6 +50,14 @@ module.exports = {
       approved: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
+      },
+      teamId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Teams',
+          key: 'id'
+        },
+        onDelete: 'SET NULL'
       },
       createdAt: {
         allowNull: false,

@@ -14,7 +14,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      home_team_id: {
+      homeTeamId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Teams',
@@ -22,7 +22,7 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      away_team_id: {
+      awayTeamId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Teams',
@@ -30,14 +30,14 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      game_date: {
+      gameDate: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      home_team_score: {
+      homeTeamScore: {
         type: Sequelize.INTEGER
       },
-      away_team_score: {
+      awayTeamScore: {
         type: Sequelize.INTEGER
       },
       createdAt: {
