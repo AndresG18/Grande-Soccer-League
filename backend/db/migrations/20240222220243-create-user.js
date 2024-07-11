@@ -50,14 +50,6 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      teamId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Teams',
-          key: 'id'
-        },
-        onDelete: 'SET NULL'
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
