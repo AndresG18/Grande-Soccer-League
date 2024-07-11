@@ -53,6 +53,8 @@ function ProfileButton({ user }) {
             <NavLink className='link' to="/">Partners</NavLink>
             <NavLink className='link' to="/">About</NavLink>
             <NavLink className='link' to="/">Regsitration</NavLink>
+            <NavLink className='link' to="/">Games</NavLink>
+            <NavLink className='link' to="/">Standings</NavLink>
             <li>{user.firstName} {user.lastName}</li>
             <li>{user.email}</li>
             <li>
