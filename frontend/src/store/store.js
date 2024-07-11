@@ -1,17 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import sessionReducer from './session';
-import {  groupReducer } from './Groups';
-import { groupIdReducer } from './Group';
-import { eventReducer } from './events';
-import eventIdReducer from './Event';
+import usersReducer from './users'; 
+import teamsReducer from './teams'; 
+import teamStandingsReducer from './teamStandings'; 
+import gamesReducer from './games'; 
 
 const rootReducer = combineReducers({
   session: sessionReducer,
-  currGroup:groupIdReducer,
-  currEvent:eventIdReducer,
-  groups: groupReducer,
-  events:eventReducer
+  users: usersReducer, 
+  teams: teamsReducer, 
+  teamStandings: teamStandingsReducer, 
+  games: gamesReducer 
 });
 
 let enhancer;
