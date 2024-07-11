@@ -10,9 +10,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET game by ID
-router.get('/:gameId', async (req, res) => {
-    const { gameId } = req.params;
-    const game = await Game.findByPk(gameId, {
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const game = await Game.findByPk(id, {
         include: [
             { model: Team, as: 'HomeTeam', attributes: ['id', 'team_name'] },
             { model: Team, as: 'AwayTeam', attributes: ['id', 'team_name'] }
@@ -30,11 +30,11 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // PUT update game
-router.put('/:gameId', requireAuth, async (req, res) => {
-    const { gameId } = req.params;
+router.put('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
     const { home_team_id, away_team_id, game_date, home_team_score, away_team_score, venue } = req.body;
 
-    const game = await Game.findByPk(gameId);
+    const game = await Game.findByPk(id);
     if (!game) return res.status(404).json({ "message": "Game couldn't be found" });
 
     game.home_team_id = home_team_id;
@@ -49,10 +49,10 @@ router.put('/:gameId', requireAuth, async (req, res) => {
 });
 
 // DELETE game
-router.delete('/:gameId', requireAuth, async (req, res) => {
-    const { gameId } = req.params;
+router.delete('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
 
-    const game = await Game.findByPk(gameId);
+    const game = await Game.findByPk(id);
     if (!game) return res.status(404).json({ "message": "Game couldn't be found" });
 
     await game.destroy();

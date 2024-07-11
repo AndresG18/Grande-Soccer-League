@@ -12,9 +12,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET team standing by ID
-router.get('/:teamStandingId', async (req, res) => {
-    const { teamStandingId } = req.params;
-    const teamStanding = await TeamStanding.findByPk(teamStandingId, {
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const teamStanding = await TeamStanding.findByPk(id, {
         include: [{ model: Team, attributes: ['id', 'team_name'] }]
     });
     if (!teamStanding) return res.status(404).json({ "message": "Team standing couldn't be found" });
@@ -29,11 +29,11 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // PUT update team standing
-router.put('/:teamStandingId', requireAuth, async (req, res) => {
-    const { teamStandingId } = req.params;
+router.put('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
     const { team_id, games_played, wins, losses, draws, points } = req.body;
 
-    const teamStanding = await TeamStanding.findByPk(teamStandingId);
+    const teamStanding = await TeamStanding.findByPk(id);
     if (!teamStanding) return res.status(404).json({ "message": "Team standing couldn't be found" });
 
     teamStanding.team_id = team_id;
@@ -48,10 +48,10 @@ router.put('/:teamStandingId', requireAuth, async (req, res) => {
 });
 
 // DELETE team standing
-router.delete('/:teamStandingId', requireAuth, async (req, res) => {
-    const { teamStandingId } = req.params;
+router.delete('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
 
-    const teamStanding = await TeamStanding.findByPk(teamStandingId);
+    const teamStanding = await TeamStanding.findByPk(id);
     if (!teamStanding) return res.status(404).json({ "message": "Team standing couldn't be found" });
 
     await teamStanding.destroy();

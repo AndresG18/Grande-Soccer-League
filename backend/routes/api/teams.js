@@ -10,9 +10,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET team by ID
-router.get('/:teamId', async (req, res) => {
-    const { teamId } = req.params;
-    const team = await Team.findByPk(teamId, {
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const team = await Team.findByPk(id, {
         include: [{ model: User, as: 'Coach', attributes: ['id', 'first_name', 'last_name'] }]
     });
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
@@ -27,11 +27,11 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // PUT update team
-router.put('/:teamId', requireAuth, async (req, res) => {
-    const { teamId } = req.params;
+router.put('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
     const { team_name, coach_id, home_arena } = req.body;
 
-    const team = await Team.findByPk(teamId);
+    const team = await Team.findByPk(id);
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
 
     team.team_name = team_name;
@@ -43,10 +43,10 @@ router.put('/:teamId', requireAuth, async (req, res) => {
 });
 
 // DELETE team
-router.delete('/:teamId', requireAuth, async (req, res) => {
-    const { teamId } = req.params;
+router.delete('/:id', requireAuth, async (req, res) => {
+    const { id } = req.params;
 
-    const team = await Team.findByPk(teamId);
+    const team = await Team.findByPk(id);
     if (!team) return res.status(404).json({ "message": "Team couldn't be found" });
 
     await team.destroy();
