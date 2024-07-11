@@ -1,42 +1,58 @@
 const express = require('express');
-const { Tournament, Bracket } = require('../../db/models');
+const { Tournament, Bracket, Game } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
-// GET all tournaments
+// GET all tournaments 
 router.get('/', async (req, res) => {
     const tournaments = await Tournament.findAll();
     res.json({ tournaments });
 });
 
-// GET tournament by ID
+// GET tournament by ID 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const tournament = await Tournament.findByPk(id, {
-        include: [{ model: Bracket, attributes: ['id', 'round_number', 'game_id'] }]
+        include: [
+            {
+                model: Bracket,
+                include: {
+                    model: Game,
+                    attributes: ['id', 'homeTeamId', 'awayTeamId', 'gameDate', 'homeTeamScore', 'awayTeamScore']
+                },
+                attributes: ['id', 'roundNumber']
+            }
+        ]
     });
     if (!tournament) return res.status(404).json({ "message": "Tournament couldn't be found" });
     res.json(tournament);
 });
 
-// POST new tournament
+// POST new tournament 
 router.post('/', requireAuth, async (req, res) => {
-    const { tournament_name, start_date, end_date } = req.body;
-    const newTournament = await Tournament.create({ tournament_name, start_date, end_date });
+    if (req.user.type !== 'admin' ) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+    const { tournamentName, startDate, endDate } = req.body;
+    const newTournament = await Tournament.create({ tournamentName, startDate, endDate });
     res.status(201).json(newTournament);
 });
 
-// PUT update tournament
+// PUT update tournament 
 router.put('/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
-    const { tournament_name, start_date, end_date } = req.body;
+    const { tournamentName, startDate, endDate } = req.body;
 
     const tournament = await Tournament.findByPk(id);
     if (!tournament) return res.status(404).json({ "message": "Tournament couldn't be found" });
 
-    tournament.tournament_name = tournament_name;
-    tournament.start_date = start_date;
-    tournament.end_date = end_date;
+    if (req.user.type !== 'admin' && req.user.type !== 'coach') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
+    tournament.tournamentName = tournamentName || tournament.tournamentName;
+    tournament.startDate = startDate || tournament.startDate;
+    tournament.endDate = endDate || tournament.endDate;
 
     await tournament.save();
     res.json(tournament);
@@ -44,6 +60,10 @@ router.put('/:id', requireAuth, async (req, res) => {
 
 // DELETE tournament
 router.delete('/:id', requireAuth, async (req, res) => {
+    if (req.user.type !== 'admin') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
     const { id } = req.params;
 
     const tournament = await Tournament.findByPk(id);
@@ -53,40 +73,58 @@ router.delete('/:id', requireAuth, async (req, res) => {
     res.json({ message: "Successfully deleted" });
 });
 
-// GET all brackets for a tournament
+// Brackets routes nested under tournaments
+
+// GET all brackets for a tournament 
 router.get('/:id/brackets', async (req, res) => {
     const { id } = req.params;
-    const brackets = await Bracket.findAll({ where: { tournament_id: id } });
-    if (!brackets) return res.status(404).json({ "message": "Brackets couldn't be found" });
+    const brackets = await Bracket.findAll({
+        where: { tournamentId: id },
+        include: {
+            model: Game,
+            attributes: ['id', 'homeTeamId', 'awayTeamId', 'gameDate', 'homeTeamScore', 'awayTeamScore']
+        }
+    });
     res.json({ brackets });
 });
 
-// POST new bracket for a tournament
+// POST new bracket for a tournament 
 router.post('/:id/brackets', requireAuth, async (req, res) => {
+    if (req.user.type !== 'admin' ) {
+        return res.status(403).json({ message: "Forbidden" });
+    }
     const { id } = req.params;
-    const { round_number, game_id } = req.body;
-    const newBracket = await Bracket.create({ tournament_id: id, round_number, game_id });
+    const { roundNumber, gameId } = req.body;
+    const newBracket = await Bracket.create({ tournamentId: id, roundNumber, gameId });
     res.status(201).json(newBracket);
 });
 
-// PUT update bracket
+// PUT update bracket for a tournament - Accessible only by admins and coaches
 router.put('/:tournamentId/brackets/:bracketId', requireAuth, async (req, res) => {
     const { tournamentId, bracketId } = req.params;
-    const { round_number, game_id } = req.body;
+    const { roundNumber, gameId } = req.body;
 
     const bracket = await Bracket.findByPk(bracketId);
     if (!bracket) return res.status(404).json({ "message": "Bracket couldn't be found" });
 
-    bracket.round_number = round_number;
-    bracket.game_id = game_id;
+    if (req.user.type !== 'admin') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
+    bracket.roundNumber = roundNumber || bracket.roundNumber;
+    bracket.gameId = gameId || bracket.gameId;
 
     await bracket.save();
     res.json(bracket);
 });
 
-// DELETE bracket
+// DELETE bracket for a tournament 
 router.delete('/:tournamentId/brackets/:bracketId', requireAuth, async (req, res) => {
-    const { bracketId } = req.params;
+    if (req.user.type !== 'admin') {
+        return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const { tournamentId, bracketId } = req.params;
 
     const bracket = await Bracket.findByPk(bracketId);
     if (!bracket) return res.status(404).json({ "message": "Bracket couldn't be found" });
