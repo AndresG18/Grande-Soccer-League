@@ -24,12 +24,11 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING(256),
-        allowNull: false,
+        allowNull:false,
         unique: true
       },
       phone: {
         type: Sequelize.STRING(15),
-        allowNull: false
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,

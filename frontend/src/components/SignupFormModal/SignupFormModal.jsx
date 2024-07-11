@@ -7,7 +7,7 @@ import './SignupForm.css';
 function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [type, setType] = useState('player');
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -22,9 +22,9 @@ function SignupFormModal() {
       return dispatch(
         sessionActions.signup({
           email,
-          username,
           firstName,
           lastName,
+          type,
           password
         })
       )
@@ -56,16 +56,6 @@ function SignupFormModal() {
         </label>
         {errors.email && <p>{errors.email}</p>}
         <label>
-          Username
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        {errors.username && <p>{errors.username}</p>}
-        <label>
           First Name
           <input
             type="text"
@@ -85,6 +75,18 @@ function SignupFormModal() {
           />
         </label>
         {errors.lastName && <p>{errors.lastName}</p>}
+        <label>
+          Type
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            required>
+              <option value='player'>Player</option>
+              <option value='coach'>Coach</option>
+
+          </select>
+        </label>
+        {errors.type && <p>{errors.type}</p>}
         <label>
           Password
           <input

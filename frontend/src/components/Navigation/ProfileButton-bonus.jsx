@@ -3,72 +3,77 @@ import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
+import { NavLink } from 'react-router-dom';
 import SignupFormModal from '../SignupFormModal';
-
+import { IoMenu } from "react-icons/io5";
+import './ProfileButton.css'
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const [showMenu, setShowMenu] = useState(false);
-  const ulRef = useRef();
+  const [showSidebar, setShowSidebar] = useState(false);
+  const sidebarRef = useRef();
 
-  const toggleMenu = (e) => {
-    e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
-    setShowMenu(!showMenu);
+  const toggleSidebar = (e) => {
+    e.stopPropagation();
+    setShowSidebar(!showSidebar);
   };
 
   useEffect(() => {
-    if (!showMenu) return;
+    if (!showSidebar) return;
 
-    const closeMenu = (e) => {
-      if (ulRef.current && !ulRef.current.contains(e.target)) {
-        setShowMenu(false);
+    const closeSidebar = (e) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+        setShowSidebar(false);
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener('click', closeSidebar);
 
-    return () => document.removeEventListener('click', closeMenu);
-  }, [showMenu]);
+    return () => document.removeEventListener('click', closeSidebar);
+  }, [showSidebar]);
 
-  const closeMenu = () => setShowMenu(false);
+  const closeSidebar = () => setShowSidebar(false);
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-    closeMenu();
+    closeSidebar();
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const sidebarClassName = "profile-sidebar" + (showSidebar ? "" : " hidden");
 
   return (
     <>
-      <button onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <div className='menu' onClick={toggleSidebar}>
+        <IoMenu className='menu-icon'/>
+      </div>
+      <div className={sidebarClassName} ref={sidebarRef}>
         {user ? (
-          <>
-            <li>{user.username}</li>
+          <div className='sidebar-content'>
+            <NavLink className='link' to="/">Home</NavLink>
+            <NavLink className='link' to="/">Partners</NavLink>
+            <NavLink className='link' to="/">About</NavLink>
+            <NavLink className='link' to="/">Regsitration</NavLink>
             <li>{user.firstName} {user.lastName}</li>
             <li>{user.email}</li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button className='logout' onClick={logout}>Log Out</button>
             </li>
-          </>
+          </div>
         ) : (
           <>
             <OpenModalMenuItem
               itemText="Log In"
-              onItemClick={closeMenu}
+              onItemClick={closeSidebar}
               modalComponent={<LoginFormModal />}
             />
             <OpenModalMenuItem
               itemText="Sign Up"
-              onItemClick={closeMenu}
+              onItemClick={closeSidebar}
               modalComponent={<SignupFormModal />}
             />
           </>
         )}
-      </ul>
+      </div>
     </>
   );
 }

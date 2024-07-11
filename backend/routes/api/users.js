@@ -19,21 +19,21 @@ const validateSignup = [
         .withMessage("Last Name is required")
         .isLength({ min: 2 })
         .withMessage("Last Name is required"),
-    check('phone')
-        .isString()
-        .withMessage("Phone number is required")
-        .isLength({ min: 10 })
-        .withMessage("Phone number is required"),
-    check('type')
-        .isIn(['admin', 'coach', 'player'])
-        .withMessage("Type must be 'admin', 'coach', or 'player'"),
+    // check('phone')
+    //     .isString()
+    //     .withMessage("Phone number is required")
+    //     .isLength({ min: 10 })
+    //     .withMessage("Phone number is required"),
+    // check('type')
+    //     .isIn(['admin', 'coach', 'player'])
+    //     .withMessage("Type must be 'admin', 'coach', or 'player'"),
     handleValidationErrors
 ];
 
 // Sign up
 router.post('/', validateSignup, async (req, res) => {
     const { firstName, lastName, email, password, phone, type, teamId } = req.body;
-
+    console.log(req.body)
     const checkingEmail = await User.findAll({
         where: { email: email }
     });
