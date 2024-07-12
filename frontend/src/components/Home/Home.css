@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #1c1c1c;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100vw;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .home-content {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    white-space: normal; /* Allow wrapping */
+    width: 100vw; /* Ensure it does not exceed the viewport width */
+  }
+  
+  section {
+    display: block;
+    vertical-align: top;
+    padding: 0px 1rem;
+    width: 100%; /* Ensure section takes full width without exceeding */
+    min-width: 320px;
+
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .hero, .about, .age-groups, .why-choose, .program-highlights {
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+    text-align: center; /* Center text for better readability */
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .hero button {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .hero button:hover {
+    background-color: #555;
+  }
+  
+  .about h2, .age-groups h2, .why-choose h2, .program-highlights h2 {
+    font-size: 1.5rem;
+  }
+  
+  .about p, .age-groups ul, .why-choose ul, .program-highlights ul {
+    font-size: 1rem;
+  }
+  
+  .age-groups ul, .why-choose ul, .program-highlights ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .age-groups li, .why-choose li, .program-highlights li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .home-footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #1c1c1c;
+  }
+  
+  .home-footer p {
+    margin: 0.5rem 0;
+  }
+  
+  .social-media-links a {
+    color: #e0e0e0;
+    margin: 0 0.5rem;
+    text-decoration: none;
+  }
+  
+  .social-media-links a:hover {
+    color: #ffffff;
+  }

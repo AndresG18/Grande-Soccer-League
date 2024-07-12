@@ -16,7 +16,7 @@ body {
     right: 0;
     top: 0;
     height: 100%;
-    width: 15rem;
+    width: 13rem;
     background-color: #121212;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     z-index: 1000;
@@ -50,7 +50,7 @@ body {
     text-align: center;
     color: #e0e0e0;
     padding: 0.5rem;
-    height: 70px;
+    height: 65px;
     border: none;
     background: none;
     cursor: pointer;
