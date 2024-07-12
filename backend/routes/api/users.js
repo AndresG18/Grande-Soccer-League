@@ -119,3 +119,63 @@ router.delete('/:id', requireAuth, async (req, res) => {
 });
 
 module.exports = router;
+// Route to register a child
+router.post('/:coachId/children', checkCoach, async (req, res) => {
+    const { coachId } = req.params;
+    const { firstName, lastName, age } = req.body;
+  
+    try {
+      const coach = await User.findByPk(coachId);
+  
+      if (!coach) {
+        return res.status(404).json({ message: 'Coach not found' });
+      }
+  
+      const newChild = await Child.create({
+        firstName,
+        lastName,
+        age,
+        coachId: coach.id,
+      });
+  
+      return res.status(201).json(newChild);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Route to get all children for a specific coach
+  router.get('/:coachId/children', checkCoach, async (req, res) => {
+    const { coachId } = req.params;
+  
+    try {
+      const children = await Child.findAll({
+        where: { coachId },
+      });
+  
+      return res.status(200).json(children);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Route to delete a specific child
+  router.delete('/children/:childId', checkCoach, async (req, res) => {
+    const { childId } = req.params;
+  
+    try {
+      const child = await Child.findByPk(childId);
+  
+      if (!child) {
+        return res.status(404).json({ message: 'Child not found' });
+      }
+  
+      await child.destroy();
+  
+      return res.status(200).json({ message: 'Child deleted successfully' });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
+  
+  module.exports = router;
