@@ -28,7 +28,12 @@ function SignupFormModal() {
           password
         })
       )
-        .then(closeModal)
+        .then(() => {
+          closeModal();
+          if (type === 'player') {
+            window.location.href = "https://eform.pandadoc.com/?eform=a12e2d9a-2f88-46ba-9011-067246a1c10d";
+          }
+        })
         .catch(async (res) => {
           const data = await res.json();
           if (data?.errors) {
@@ -40,75 +45,81 @@ function SignupFormModal() {
       confirmPassword: "Confirm Password field must be the same as the Password field"
     });
   };
-
+  
   return (
     <>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
+      <h1 className="signup-title">Sign Up</h1>
+      <form onSubmit={handleSubmit} className="signup-form">
+        <label className="signup-label">
+          Parent / Gaurdian Email
           <input
+            className="signup-input"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+            />
         </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          First Name
+        {errors.email && <p className="signup-error">{errors.email}</p>}
+        <label className="signup-label">
+         {"Player's First Name"}
           <input
+            className="signup-input"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
-          />
+            />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
-          Last Name
+        {errors.firstName && <p className="signup-error">{errors.firstName}</p>}
+        <label className="signup-label">
+        {"Player's Last Name"}
           <input
+            className="signup-input"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
-          />
+            />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
+        {errors.lastName && <p className="signup-error">{errors.lastName}</p>}
+        <label className="signup-label">
           Type
           <select
+            className="signup-select"
             value={type}
             onChange={(e) => setType(e.target.value)}
             required>
               <option value='player'>Player</option>
               <option value='coach'>Coach</option>
-
           </select>
         </label>
-        {errors.type && <p>{errors.type}</p>}
-        <label>
+        {errors.type && <p className="signup-error">{errors.type}</p>}
+        <label className="signup-label">
           Password
           <input
+            className="signup-input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-          />
+            />
         </label>
-        {errors.password && <p>{errors.password}</p>}
-        <label>
+        {errors.password && <p className="signup-error">{errors.password}</p>}
+        <label className="signup-label">
           Confirm Password
           <input
+            className="signup-input"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-          />
+            />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        {errors.confirmPassword && <p className="signup-error">{errors.confirmPassword}</p>}
+        <button type="submit" className="signup-button">Sign Up</button>
       </form>
+<p>{'Note: Parent / Gaurdian will be redirected to sign a waiver after this step. *Required*'}</p>
     </>
   );
 }

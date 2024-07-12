@@ -8,6 +8,12 @@ import SignupFormModal from '../SignupFormModal';
 import { IoMenu } from "react-icons/io5";
 import { NavLink } from 'react-router-dom';
 import './ProfileButton.css';
+import { FaHome } from "react-icons/fa";
+import { GiSoccerBall } from "react-icons/gi";
+import { FaCircleInfo } from "react-icons/fa6";
+import { FaUserFriends } from "react-icons/fa";
+import { IoIosContact } from "react-icons/io";
+import { FaRankingStar } from "react-icons/fa6";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -32,7 +38,18 @@ function ProfileButton({ user }) {
 
     return () => document.removeEventListener('click', closeSidebar);
   }, [showSidebar]);
+  useEffect(() => {
+    const elementsToCloseSidebar = document.querySelectorAll('.link, .logout, .menu-icon');
+    elementsToCloseSidebar.forEach(element => {
+      element.addEventListener('click', closeSidebar);
+    });
 
+    return () => {
+      elementsToCloseSidebar.forEach(element => {
+        element.removeEventListener('click', closeSidebar);
+      });
+    };
+  }, []);
   const closeSidebar = () => setShowSidebar(false);
 
   const logout = (e) => {
@@ -50,12 +67,12 @@ function ProfileButton({ user }) {
       </div>
       <div className={sidebarClassName} ref={sidebarRef}>
         <div className='sidebar-content'>
-          <NavLink className='link' to="/">Home</NavLink>
-          <NavLink className='link' to="/">Partners</NavLink>
-          <NavLink className='link' to="/">About</NavLink>
-          <NavLink className='link' to="/">Registration</NavLink>
-          <NavLink className='link' to="/">Games</NavLink>
-          <NavLink className='link' to="/">Standings</NavLink>
+          <NavLink className='link' to="/">Home <FaHome /></NavLink>
+          <NavLink className='link' to="/">Games <GiSoccerBall /></NavLink>
+          <NavLink className='link' to="/">Standings <FaRankingStar /></NavLink>
+          <NavLink className='link' to="/">Partners <FaUserFriends /></NavLink>
+          <NavLink className='link' to="/">About <FaCircleInfo /> </NavLink>
+          <NavLink className='link' to="/">Contact <IoIosContact /></NavLink>
           {user ? (
             <>
               {/* <li>{user.firstName} {user.lastName}</li>

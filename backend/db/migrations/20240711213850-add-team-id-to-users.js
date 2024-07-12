@@ -20,7 +20,6 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'SET NULL',
-        allowNull: true
       },
       options
     );
