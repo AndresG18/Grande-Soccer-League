@@ -5,13 +5,14 @@ import usersReducer from './users';
 import teamsReducer from './teams'; 
 import teamStandingsReducer from './teamStandings'; 
 import gamesReducer from './games'; 
-
+import childrenReducer from './children';
 const rootReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer, 
   teams: teamsReducer, 
   teamStandings: teamStandingsReducer, 
-  games: gamesReducer 
+  games: gamesReducer ,
+  children: childrenReducer
 });
 
 let enhancer;
