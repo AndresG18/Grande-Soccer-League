@@ -38,6 +38,7 @@ function ProfileButton({ user }) {
 
     return () => document.removeEventListener('click', closeSidebar);
   }, [showSidebar]);
+  
   useEffect(() => {
     const elementsToCloseSidebar = document.querySelectorAll('.link, .logout, .menu-icon');
     elementsToCloseSidebar.forEach(element => {
@@ -50,6 +51,7 @@ function ProfileButton({ user }) {
       });
     };
   }, []);
+  
   const closeSidebar = () => setShowSidebar(false);
 
   const logout = (e) => {
@@ -71,12 +73,10 @@ function ProfileButton({ user }) {
           <NavLink className='link' to="/">Games <GiSoccerBall /></NavLink>
           <NavLink className='link' to="/">Standings <FaRankingStar /></NavLink>
           <NavLink className='link' to="/">Partners <FaUserFriends /></NavLink>
-          <NavLink className='link' to="/">About <FaCircleInfo /> </NavLink>
+          <NavLink className='link' to="/">About <FaCircleInfo /></NavLink>
           <NavLink className='link' to="/">Contact <IoIosContact /></NavLink>
           {user ? (
             <>
-              {/* <li>{user.firstName} {user.lastName}</li>
-              <li>{user.email}</li> */}
               <li>
                 <button className='logout' onClick={logout}>Log Out</button>
               </li>

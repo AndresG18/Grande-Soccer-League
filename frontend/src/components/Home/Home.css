@@ -1,8 +1,16 @@
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: #101010;
+    background: linear-gradient(45deg, #101010, #1a1a1a, #2b2b2b, #1a1a1a);
+    background-size: 400% 400%;
+    animation: gradientBackground 10s ease infinite;
     color: #f0f0f0;
+}
+
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .navBar {
@@ -100,7 +108,7 @@ section:hover {
 }
 
 .registration li::before {
-    /* content: "⮞"; Different icon for xregistration steps */
+    /* content: "⮞"; Different icon for registration steps */
     margin-right: 0.5rem;
     color: #f0f0f0;
 }
@@ -147,6 +155,7 @@ section:hover {
         transform: translateY(0);
     }
 }
+
 .logout {
     font-size: 1.5rem;
 }
