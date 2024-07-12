@@ -5,3 +5,6 @@ h1,h2,h3,span,p{
   display: flex;
   justify-content: space-between;
 } 
+.register{
+  font-size: 2rem;
+}
